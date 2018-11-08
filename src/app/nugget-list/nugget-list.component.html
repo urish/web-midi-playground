@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
-    <mat-toolbar>Music Nuggets</mat-toolbar>
+    <mat-toolbar>Trumpet Nuggets</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item href="#" *ngFor="let nugget of nuggets$|async">
         {{nugget.name}}

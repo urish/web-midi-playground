@@ -42,5 +42,5 @@ const delay = (seconds) =>
   await delay(500);
   noteOff(G4);
   await delay(100);
-})();
+})().catch(console.error);
 `;
