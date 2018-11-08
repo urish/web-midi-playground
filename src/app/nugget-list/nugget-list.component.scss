@@ -22,6 +22,11 @@ mat-sidenav-content {
 }
 
 .main-content {
+  display: flex;
   position: relative;
+  flex: 1;
+}
+
+app-nugget-editor {
   flex: 1;
 }

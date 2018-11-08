@@ -1,5 +1,11 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
 ngx-monaco-editor {
-  height: 100%;
+  flex: 1;
+  margin-bottom: 60px;
 }
 
 mat-progress-spinner {
