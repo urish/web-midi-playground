@@ -11,21 +11,28 @@ export class NuggetEditorComponent implements OnInit {
   readonly editorOptions = {
     theme: 'vs-dark',
     language: 'typescript',
-    fontSize: 20,
+    fontSize: 20
   };
   code = codeTemplate;
 
-  @ViewChild('codeRunner') frame: ElementRef<HTMLIFrameElement>;
+  @ViewChild('codeRunner')
+  frame: ElementRef<HTMLIFrameElement>;
+
+  private model: monaco.editor.ITextModel;
 
   constructor() {}
 
   ngOnInit() {}
 
+  editorLoaded(editor: monaco.editor.ICodeEditor) {
+    this.model = editor.getModel();
+    this.model.updateOptions({ tabSize: 2 });
+  }
+
   async runCode() {
-    const model = monaco.editor.getModels()[0];
     const worker = await monaco.languages.typescript.getTypeScriptWorker();
-    const client: LanguageService = await worker(model.uri);
-    const result = await client.getEmitOutput(model.uri.toString());
+    const client: LanguageService = await worker(this.model.uri);
+    const result = await client.getEmitOutput(this.model.uri.toString());
     const compiledCode = result.outputFiles[0].text;
 
     const frameWindow = this.frame.nativeElement.contentWindow;
