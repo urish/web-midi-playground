@@ -19,15 +19,13 @@ import { NuggetEditorComponent } from './nugget-editor/nugget-editor.component';
 import { CommonModule } from '@angular/common';
 import { webMidiTypes } from './web-midi-types';
 
-const monacoConfig: NgxMonacoEditorConfig = {
-  onMonacoLoad: () => {
-    // This makes Web MIDI APIs available in the editor
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      webMidiTypes,
-      'webmidi.d.ts'
-    );
-  }
-};
+export function onMonacoLoad() {
+  // This makes Web MIDI APIs available in the editor
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    webMidiTypes,
+    'webmidi.d.ts'
+  );
+}
 
 @NgModule({
   declarations: [AppComponent, NuggetListComponent, NuggetEditorComponent],
@@ -35,7 +33,7 @@ const monacoConfig: NgxMonacoEditorConfig = {
     BrowserModule,
     CommonModule,
     AppRoutingModule,
-    MonacoEditorModule.forRoot(monacoConfig),
+    MonacoEditorModule.forRoot({ onMonacoLoad }),
     FormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
