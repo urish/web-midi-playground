@@ -40,3 +40,4 @@ Thumbs.db
 
 # Firebase hosting
 hosting.*
+firebase-debug.log
