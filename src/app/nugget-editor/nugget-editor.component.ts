@@ -1,6 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LanguageService } from 'typescript';
 import { codeTemplate } from '../code-template';
+import { MockMidiTrumpetService } from '../mock-midi-trumpet.service';
+
+const MOCK_MIDI = location.search.indexOf('mockMidi=1') >= 0;
 
 @Component({
   selector: 'app-nugget-editor',
@@ -20,7 +23,11 @@ export class NuggetEditorComponent implements OnInit {
 
   private model: monaco.editor.ITextModel;
 
-  constructor() {}
+  constructor(private mockMidiTrumpet: MockMidiTrumpetService) {
+    if (MOCK_MIDI) {
+      mockMidiTrumpet.init();
+    }
+  }
 
   ngOnInit() {}
 
@@ -41,7 +48,10 @@ export class NuggetEditorComponent implements OnInit {
     const scriptElement = frameWindow.document.createElement('script');
     iframe.onload = () => {
       scriptElement.type = 'text/javascript';
-      scriptElement.innerHTML = compiledCode;
+      if (MOCK_MIDI) {
+        (frameWindow.navigator as any).requestMIDIAccess = this.mockMidiTrumpet.createMockMidiTrumpet();
+      }
+      scriptElement.innerHTML += compiledCode;
       frameWindow.document.head.appendChild(scriptElement);
     };
   }
