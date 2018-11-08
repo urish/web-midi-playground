@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { MatButtonModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
     BrowserModule,
     CommonModule,
     AppRoutingModule,
-    CodemirrorModule,
+    MonacoEditorModule.forRoot(),
     FormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
