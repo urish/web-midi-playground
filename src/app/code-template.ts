@@ -14,8 +14,8 @@ const
   Fs6 = 90, G6 = 91, Gs6 = 92, A6 = 93, As6 = 94, B6 = 95,
   C7 = 96;
 
-const delay = (seconds) =>
-  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+const delay = (ms) =>
+  new Promise(resolve => setTimeout(resolve, ms));
 
 (async function() {
   const midi = await navigator.requestMIDIAccess();
