@@ -6,6 +6,7 @@ import { MatButtonModule, MatToolbarModule, MatIconModule } from '@angular/mater
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     CodemirrorModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
