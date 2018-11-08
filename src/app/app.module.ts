@@ -1,22 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { LayoutModule } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatToolbarModule,
   MatIconModule,
+  MatListModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
-  MatListModule
+  MatToolbarModule
 } from '@angular/material';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { NuggetListComponent } from './nugget-list/nugget-list.component';
-import { LayoutModule } from '@angular/cdk/layout';
 import { NuggetEditorComponent } from './nugget-editor/nugget-editor.component';
-import { CommonModule } from '@angular/common';
+import { NuggetListComponent } from './nugget-list/nugget-list.component';
 import { webMidiTypes } from './web-midi-types';
 
 export function onMonacoLoad() {
@@ -41,6 +41,7 @@ export function onMonacoLoad() {
     MatIconModule,
     LayoutModule,
     MatSidenavModule,
+    MatProgressSpinnerModule,
     MatListModule
   ],
   providers: [],

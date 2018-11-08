@@ -1,3 +1,10 @@
 ngx-monaco-editor {
   height: 100%;
 }
+
+mat-progress-spinner {
+  position: absolute;
+  z-index: 100;
+  top: 20px;
+  left: 50%;
+}

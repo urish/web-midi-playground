@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  NgZone
+} from '@angular/core';
 import { LanguageService } from 'typescript';
 import { codeTemplate } from '../code-template';
 import { MockMidiTrumpetService } from '../mock-midi-trumpet.service';
@@ -16,14 +22,19 @@ export class NuggetEditorComponent implements OnInit {
     language: 'typescript',
     fontSize: 20
   };
+
   code = codeTemplate;
+  editorReady = false;
 
   @ViewChild('codeRunner')
   frame: ElementRef<HTMLIFrameElement>;
 
   private model: monaco.editor.ITextModel;
 
-  constructor(private mockMidiTrumpet: MockMidiTrumpetService) {
+  constructor(
+    private mockMidiTrumpet: MockMidiTrumpetService,
+    private ngZone: NgZone
+  ) {
     if (MOCK_MIDI) {
       mockMidiTrumpet.init();
     }
@@ -34,6 +45,9 @@ export class NuggetEditorComponent implements OnInit {
   editorLoaded(editor: monaco.editor.ICodeEditor) {
     this.model = editor.getModel();
     this.model.updateOptions({ tabSize: 2 });
+    this.ngZone.run(() => {
+      this.editorReady = true;
+    });
   }
 
   async runCode() {

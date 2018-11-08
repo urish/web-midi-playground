@@ -1,5 +1,10 @@
-<button (click)="runCode()" mat-button>
-  <mat-icon>play_arrow</mat-icon> Run!</button>
+<mat-progress-spinner mode="indeterminate" *ngIf="!editorReady"></mat-progress-spinner>
+
+<div [hidden]="!editorReady">
+  <button (click)="runCode()" mat-button>
+    <mat-icon>play_arrow</mat-icon> Run!
+  </button>
+</div>
 
 <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code" (onInit)="editorLoaded($event)">
 </ngx-monaco-editor>
