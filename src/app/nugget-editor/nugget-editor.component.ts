@@ -35,11 +35,14 @@ export class NuggetEditorComponent implements OnInit {
     const result = await client.getEmitOutput(this.model.uri.toString());
     const compiledCode = result.outputFiles[0].text;
 
-    const frameWindow = this.frame.nativeElement.contentWindow;
-    frameWindow.location.href = '/assets/empty.html';
+    const iframe = this.frame.nativeElement;
+    iframe.src = 'about:blank';
+    const frameWindow = iframe.contentWindow;
     const scriptElement = frameWindow.document.createElement('script');
-    scriptElement.type = 'text/javascript';
-    scriptElement.innerHTML = compiledCode;
-    frameWindow.document.head.appendChild(scriptElement);
+    iframe.onload = () => {
+      scriptElement.type = 'text/javascript';
+      scriptElement.innerHTML = compiledCode;
+      frameWindow.document.head.appendChild(scriptElement);
+    };
   }
 }
