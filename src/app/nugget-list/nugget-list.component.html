@@ -3,8 +3,9 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
     <mat-toolbar>Trumpet Nuggets</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" *ngFor="let nugget of nuggets$|async">
-        {{nugget.name}}
+      <a mat-list-item [routerLink]="['nuggets', nugget.id]"
+         *ngFor="let nugget of nuggets$|async">
+        {{nugget.id}}
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -16,7 +17,7 @@
       <span>🎶 Web MIDI Playground</span>
     </mat-toolbar>
     <div class="main-content">
-      <app-nugget-editor></app-nugget-editor>
+      <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

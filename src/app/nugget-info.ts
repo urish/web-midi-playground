@@ -1,6 +1,5 @@
 export interface INuggetInfo {
-  id?: string;
-  name: string;
+  id: string;
   code: string;
   playCount?: number;
 }
