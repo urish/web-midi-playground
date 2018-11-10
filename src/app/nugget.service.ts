@@ -29,17 +29,18 @@ export class NuggetService {
   private readonly nuggetSnapshot$ = new Observable<
     firebase.firestore.QuerySnapshot
   >(observer =>
-    this.ngZone.run(() =>
-      firebase
-        .firestore()
-        .collection('nuggets')
-        .onSnapshot(observer)
-    )
+    this.ngZone.run(() => this.nuggetsCollection.onSnapshot(observer))
   );
 
+  private get nuggetsCollection() {
+    return firebase.firestore().collection('nuggets');
+  }
+
   nugget(id: string) {
-    return this.nuggets$.pipe(
-      map(nuggets => nuggets.find(n => n.id === id))
-    );
+    return this.nuggets$.pipe(map(nuggets => nuggets.find(n => n.id === id)));
+  }
+
+  save(id: string, code: string) {
+    this.nuggetsCollection.doc(id).set({ code });
   }
 }

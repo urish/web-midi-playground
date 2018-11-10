@@ -4,9 +4,15 @@
   <button (click)="runCode()" mat-button>
     <mat-icon>play_arrow</mat-icon> Run!
   </button>
+  <button (click)="saveCode()" mat-button>
+    <mat-icon>save</mat-icon> Save
+  </button>
+  <mat-slide-toggle [(ngModel)]="showPreview">
+    Preview Pane
+  </mat-slide-toggle>
 </div>
 
 <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code" (onInit)="editorLoaded($event)">
 </ngx-monaco-editor>
 
-<iframe #codeRunner style="display: none;" allow="midi"></iframe>
+<iframe #codeRunner [hidden]="!showPreview" allow="midi"></iframe>

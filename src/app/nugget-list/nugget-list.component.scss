@@ -16,6 +16,10 @@
   z-index: 1;
 }
 
+.active-item {
+  font-weight: bold;
+}
+
 mat-sidenav-content {
   display: flex;
   flex-direction: column;

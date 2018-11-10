@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { LanguageService } from 'typescript';
@@ -24,6 +24,7 @@ const MOCK_MIDI = location.search.indexOf('mockMidi=1') >= 0;
 export class NuggetEditorComponent implements OnInit, OnDestroy {
   readonly editorOptions = {
     theme: 'vs-dark',
+    automaticLayout: true,
     language: 'typescript',
     fontSize: 20
   };
@@ -31,6 +32,7 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
   nuggetId: string | null = null;
   code = '';
   editorReady = false;
+  showPreview = false;
 
   @ViewChild('codeRunner')
   frame: ElementRef<HTMLIFrameElement>;
@@ -43,7 +45,8 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
     private mockMidiTrumpet: MockMidiTrumpetService,
     private ngZone: NgZone,
     private route: ActivatedRoute,
-    nuggetService: NuggetService
+    private nuggetService: NuggetService,
+    private router: Router
   ) {
     if (MOCK_MIDI) {
       mockMidiTrumpet.init();
@@ -72,12 +75,41 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  editorLoaded(editor: monaco.editor.ICodeEditor) {
+  editorLoaded(editor: monaco.editor.IStandaloneCodeEditor) {
     this.model = editor.getModel();
     this.model.updateOptions({ tabSize: 2 });
     this.ngZone.run(() => {
       this.editorReady = true;
     });
+
+    editor.addAction({
+      id: 'save',
+      label: 'Save',
+      keybindings: [
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S // tslint:disable-line
+      ],
+      run: () => this.saveCode()
+    });
+
+    editor.addAction({
+      id: 'run',
+      label: 'Run',
+      keybindings: [
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, // tslint:disable-line
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_R, // tslint:disable-line
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.F5 // tslint:disable-line
+      ],
+      run: () => monaco.Promise.wrap(this.runCode())
+    });
+  }
+
+  saveCode() {
+    const name = prompt('Enter name?');
+    if (name) {
+      this.nuggetId = name;
+      this.nuggetService.save(this.nuggetId, this.code);
+      this.router.navigate(['nuggets', this.nuggetId]);
+    }
   }
 
   async runCode() {

@@ -8,6 +8,7 @@ import {
   MatListModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatSlideToggleModule,
   MatToolbarModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -42,7 +43,8 @@ export function onMonacoLoad() {
     LayoutModule,
     MatSidenavModule,
     MatProgressSpinnerModule,
-    MatListModule
+    MatListModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
