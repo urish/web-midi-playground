@@ -8,13 +8,10 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
-import { LanguageService } from 'typescript';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { CodeRunnerService } from '../code-runner.service';
 import { codeTemplate } from '../code-template';
-import { MockMidiTrumpetService } from '../mock-midi-trumpet.service';
 import { NuggetService } from '../nugget.service';
-
-const MOCK_MIDI = location.search.indexOf('mockMidi=1') >= 0;
 
 @Component({
   selector: 'app-nugget-editor',
@@ -42,15 +39,12 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
   private model: monaco.editor.ITextModel;
 
   constructor(
-    private mockMidiTrumpet: MockMidiTrumpetService,
     private ngZone: NgZone,
     private route: ActivatedRoute,
     private nuggetService: NuggetService,
-    private router: Router
+    private router: Router,
+    private codeRunnerService: CodeRunnerService
   ) {
-    if (MOCK_MIDI) {
-      mockMidiTrumpet.init();
-    }
     this.route.params
       .pipe(
         takeUntil(this.destroy$),
@@ -112,23 +106,10 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  async runCode() {
-    const worker = await monaco.languages.typescript.getTypeScriptWorker();
-    const client: LanguageService = await worker(this.model.uri);
-    const result = await client.getEmitOutput(this.model.uri.toString());
-    const compiledCode = result.outputFiles[0].text;
-
-    const iframe = this.frame.nativeElement;
-    iframe.src = 'about:blank';
-    const frameWindow = iframe.contentWindow;
-    const scriptElement = frameWindow.document.createElement('script');
-    iframe.onload = () => {
-      scriptElement.type = 'text/javascript';
-      if (MOCK_MIDI) {
-        (frameWindow.navigator as any).requestMIDIAccess = this.mockMidiTrumpet.createMockMidiTrumpet();
-      }
-      scriptElement.innerHTML += compiledCode;
-      frameWindow.document.head.appendChild(scriptElement);
-    };
+  runCode() {
+    return this.codeRunnerService.transpileAndRun(
+      this.model,
+      this.frame.nativeElement
+    );
   }
 }
