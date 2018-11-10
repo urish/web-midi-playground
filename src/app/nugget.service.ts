@@ -41,6 +41,9 @@ export class NuggetService {
   }
 
   save(id: string, code: string) {
-    this.nuggetsCollection.doc(id).set({ code });
+    this.nuggetsCollection.doc(id).set({
+      code,
+      created: firebase.firestore.FieldValue.serverTimestamp()
+    });
   }
 }
