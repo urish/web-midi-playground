@@ -19,11 +19,14 @@ import { NuggetService } from '../nugget.service';
   styleUrls: ['./nugget-editor.component.scss']
 })
 export class NuggetEditorComponent implements OnInit, OnDestroy {
-  readonly editorOptions = {
+  readonly editorOptions: monaco.editor.IEditorConstructionOptions = {
     theme: 'vs-dark',
     automaticLayout: true,
     language: 'typescript',
-    fontSize: 20
+    fontSize: 20,
+    minimap: {
+      enabled: false
+    }
   };
 
   nuggetId: string | null = null;
