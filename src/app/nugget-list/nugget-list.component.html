@@ -6,7 +6,10 @@
       <a mat-list-item [routerLink]="['nuggets', nugget.id]"
         routerLinkActive="active-item"
          *ngFor="let nugget of nuggets$|async">
-        {{nugget.id}}
+         {{nugget.id}}
+         <mat-chip-list *ngIf="nugget.playCount" style="margin-left: 8px;">
+           <mat-chip>{{nugget.playCount}}</mat-chip>
+         </mat-chip-list>
       </a>
     </mat-nav-list>
   </mat-sidenav>

@@ -9,7 +9,9 @@ import {
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatSlideToggleModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatBadgeModule,
+  MatChipsModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -44,7 +46,9 @@ export function onMonacoLoad() {
     MatSidenavModule,
     MatProgressSpinnerModule,
     MatListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatBadgeModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
