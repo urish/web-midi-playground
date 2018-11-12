@@ -21,12 +21,18 @@ import { AppComponent } from './app.component';
 import { NuggetEditorComponent } from './nugget-editor/nugget-editor.component';
 import { NuggetListComponent } from './nugget-list/nugget-list.component';
 import { webMidiTypes } from './web-midi-types';
+import { webBluetoothTypes } from './web-bluetooth-types';
 
 export function onMonacoLoad() {
   // This makes Web MIDI APIs available in the editor
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     webMidiTypes,
     'webmidi.d.ts'
+  );
+
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    webBluetoothTypes,
+    'web-bluetooth.d.ts'
   );
 }
 
