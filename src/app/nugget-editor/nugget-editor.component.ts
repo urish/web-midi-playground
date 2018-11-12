@@ -54,11 +54,12 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
         switchMap(({ id }) => nuggetService.nugget(id))
       )
       .subscribe(nuggetInfo => {
-        console.log(nuggetInfo);
         if (nuggetInfo) {
           const { id, code } = nuggetInfo;
-          this.nuggetId = id;
-          this.code = code;
+          if (this.nuggetId !== id) {
+            this.nuggetId = id;
+            this.code = code;
+          }
         } else {
           this.nuggetId = null;
           this.code = codeTemplate;
