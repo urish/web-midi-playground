@@ -46,4 +46,12 @@ export class NuggetService {
       created: firebase.firestore.FieldValue.serverTimestamp()
     });
   }
+
+  async updatePlayCount(id: string) {
+    const doc = this.nuggetsCollection.doc(id);
+    const snapshot = await doc.get();
+    doc.update({
+      playCount: (snapshot.data().playCount || 0) + 1
+    });
+  }
 }

@@ -109,8 +109,11 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  runCode() {
-    return this.codeRunnerService.transpileAndRun(
+  async runCode() {
+    if (this.nuggetId) {
+      this.nuggetService.updatePlayCount(this.nuggetId);
+    }
+    await this.codeRunnerService.transpileAndRun(
       this.model,
       this.frame.nativeElement
     );
