@@ -35,7 +35,8 @@ export class MockMidiTrumpetService {
         (this.mockSynthIframe.contentWindow as any).processMidiMessage(
           `M${msg},${b1},${b2}`
         );
-      }
+      },
+      name: 'Teensy MIDI MIDI 1'
     });
 
     return () => this.mockSynthLoaded.then(() => mockMidiTrumpet);

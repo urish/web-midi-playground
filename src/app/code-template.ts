@@ -19,7 +19,8 @@ const delay = (ms) =>
 
 (async function() {
   const midi = await navigator.requestMIDIAccess();
-  const midiOutput = Array.from(midi.outputs.values())[0];
+  const midiOutput = Array.from(midi.outputs.values())
+    .find(o => o.name.includes('Teensy'));
 
   const noteOn = (idx, velocity = 127) =>
     midiOutput.send([NOTE_ON, idx, velocity]);
