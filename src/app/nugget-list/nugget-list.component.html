@@ -18,7 +18,14 @@
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>🎶 Web MIDI Playground</span>
+      <span style="flex: 1; display: flex;">
+        <span>🎶 Web MIDI Trumpet
+          <font color="#ffff80" style="margin-left: 2em">
+            https://go.urish.org/trumpet</font>
+        </span>
+        <span style="flex: 1"></span>
+        <span>@UriShaked</span>
+      </span>
     </mat-toolbar>
     <div class="main-content">
       <router-outlet></router-outlet>
