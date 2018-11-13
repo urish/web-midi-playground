@@ -51,7 +51,9 @@ export class CodeRunnerService {
   ) {
     const sourceCode = model.getValue();
     const instrumented = this.codeHighlighter.instrumentCode(sourceCode);
-    const compiledCode = ts.transpile(instrumented);
+    const compiledCode = ts.transpile(instrumented, {
+      target: ts.ScriptTarget.ES2018
+    });
 
     target.src = 'about:blank';
     const frameWindow = target.contentWindow;
