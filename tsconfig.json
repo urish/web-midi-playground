@@ -16,6 +16,12 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "crypto": ["src/dummy.ts"],
+      "source-map-support": ["src/dummy.ts"],
+      "fs": ["src/dummy.ts"],
+      "path": ["src/dummy.ts"]
+    }
   }
 }

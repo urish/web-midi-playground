@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
-import { LanguageService } from 'typescript';
+import { fromEvent } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import * as ts from 'typescript';
+import { CodeHighlighterService } from './code-highlighter.service';
 import { MockMidiTrumpetService } from './mock-midi-trumpet.service';
+
+export type IHighlightRange = [number, number, number, number];
+
+export interface IHighlightInfo {
+  type: string;
+  range: IHighlightRange;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -8,20 +18,40 @@ import { MockMidiTrumpetService } from './mock-midi-trumpet.service';
 export class CodeRunnerService {
   public mockMidi = location.search.indexOf('mockMidi=1') >= 0;
 
-  constructor(private mockMidiTrumpet: MockMidiTrumpetService) {
+  readonly highlight$ = fromEvent(window, 'message').pipe(
+    map((messageEvent: MessageEvent) => messageEvent.data as IHighlightInfo),
+    filter(data => data.type === 'editor$highlight')
+  );
+
+  constructor(
+    private mockMidiTrumpet: MockMidiTrumpetService,
+    private codeHighlighter: CodeHighlighterService
+  ) {
     if (this.mockMidi) {
       this.mockMidiTrumpet.init();
     }
+  }
+
+  private addHighlightMethod(target: Window) {
+    (target as any)._$highlight = function(range: IHighlightRange, retVal) {
+      target.parent.postMessage(
+        {
+          type: 'editor$highlight',
+          range
+        } as IHighlightInfo,
+        '*'
+      );
+      return retVal;
+    };
   }
 
   async transpileAndRun(
     model: monaco.editor.ITextModel,
     target: HTMLIFrameElement
   ) {
-    const worker = await monaco.languages.typescript.getTypeScriptWorker();
-    const client: LanguageService = await worker(model.uri);
-    const result = await client.getEmitOutput(model.uri.toString());
-    const compiledCode = result.outputFiles[0].text;
+    const sourceCode = model.getValue();
+    const instrumented = this.codeHighlighter.instrumentCode(sourceCode);
+    const compiledCode = ts.transpile(instrumented);
 
     target.src = 'about:blank';
     const frameWindow = target.contentWindow;
@@ -31,6 +61,7 @@ export class CodeRunnerService {
       if (this.mockMidi) {
         (frameWindow.navigator as any).requestMIDIAccess = this.mockMidiTrumpet.createMockMidiTrumpet();
       }
+      this.addHighlightMethod(frameWindow);
       scriptElement.innerHTML += compiledCode;
       frameWindow.document.head.appendChild(scriptElement);
     };

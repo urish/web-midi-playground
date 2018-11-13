@@ -40,6 +40,7 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
 
   private model: monaco.editor.ITextModel;
+  private activeDecorations: string[] = [];
 
   constructor(
     private ngZone: NgZone,
@@ -73,6 +74,13 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
+  private clearDecorations(editor: monaco.editor.IStandaloneCodeEditor) {
+    this.activeDecorations = editor.deltaDecorations(
+      this.activeDecorations,
+      []
+    );
+  }
+
   editorLoaded(editor: monaco.editor.IStandaloneCodeEditor) {
     this.model = editor.getModel();
     this.model.updateOptions({ tabSize: 2 });
@@ -99,6 +107,29 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
       ],
       run: () => monaco.Promise.wrap(this.runCode())
     });
+
+    this.codeRunnerService.highlight$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(highlight => {
+        if (!highlight.range) {
+          this.clearDecorations(editor);
+          return;
+        }
+
+        const [startLine, startCol, endLine, endCol] = highlight.range;
+        const range = new monaco.Range(startLine, startCol, endLine, endCol);
+        editor.revealRange(range);
+        this.activeDecorations = editor.deltaDecorations(
+          this.activeDecorations,
+          [
+            {
+              range,
+              options: { inlineClassName: 'editor-running-line-highlight' }
+            }
+          ]
+        );
+        console.log(this.activeDecorations);
+      });
   }
 
   saveCode() {
