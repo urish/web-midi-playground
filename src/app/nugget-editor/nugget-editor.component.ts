@@ -128,7 +128,6 @@ export class NuggetEditorComponent implements OnInit, OnDestroy {
             }
           ]
         );
-        console.log(this.activeDecorations);
       });
   }
 
